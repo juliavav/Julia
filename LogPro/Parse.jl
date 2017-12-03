@@ -49,8 +49,9 @@ for j in eachindex(families)
             nameH=membersD[husb]
             if nameH!=""
                 str=father(nameH,membersD[chil[k]])
-                print(str)
-                println(".")
+                open("myFamily.pl","a") do file
+                    write(file,("father('$(str.father)', '$(str.child)')\n"))
+                end
             end
             #fathers[husbCount]=str
             #husbCount++
@@ -69,8 +70,9 @@ for j in eachindex(families)
             nameM=membersD[wife]
             if nameM!=""
                 str=mother(nameM,membersD[chil[k]])
-                print(str)
-                println(".")
+                open("myFamily.pl","a") do file
+                    write(file,("mother('$(str.mother)', '$(str.child)')\n"))
+                end
                 end
             #fathers[husbCount]=str
             #husbCount++
