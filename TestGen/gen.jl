@@ -1,15 +1,14 @@
 file = open("input.txt");
 words=String[]
 for ln in eachline(file)
-    ln=chomp(ln)  
-    #show(ln)  
+    ln=chomp(ln)   
     push!(words,ln)
 end
 
 close(file)
 wordsSize=size(words,1)
 patternSize=rand(1:5)
-textSize=rand(20:100)
+textSize=rand(30:100)
 
 patternNums=rand(1:wordsSize,patternSize)
 #show(patternNums)
