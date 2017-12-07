@@ -8,21 +8,15 @@ names = matchall(r"1 NAME.*\n",text)
 
 for i=1:size(indi,1)
         indi[i]=replace(indi[i],"0 ","")
-        #indi[i]=chop(indi[i])
         names[i]=replace(names[i],"1 NAME ","")
         names[i]=replace(names[i]," //","")
         names[i]=replace(names[i],"\r\n","")
-        # if ismatch(r"\s\s.+",names[i]) #check regex
-        #     println("OOOOOOOO")
-        #     names[i]=replace(names[i]," ","")
-        # end
-        #names[i]=replace(names[i]," /","")
         names[i]=replace(names[i],"/","")
         membersD[indi[i]]=names[i]
-#print(indi[i])
-#println(membersD)
 end
+
 families = matchall(r"0 @F.*?1 RIN"sm, text)
+
 struct father
     father
     child
@@ -32,29 +26,23 @@ struct mother
     mother
     child
 end
-#fathers=Array{FatherS,1}
-#mothers=Array{MotherS,1}
-# families = matchall(r"0 @F.*@ FAM", text)
+
 for j in eachindex(families)
     if contains(families[j],"HUSB")&&contains(families[j],"CHIL")
         husb=match(r"HUSB @.*",families[j]).match
         husb=replace(husb,"HUSB ","")
         husb=replace(husb,"\r","")
         chil=matchall(r"CHIL .*",families[j])
-        #println(husb)
         for k in eachindex(chil)
             chil[k]=replace(chil[k],"CHIL ","")
             chil[k]=replace(chil[k],"\r","")
-            #println(chil[k])
             nameH=membersD[husb]
             if nameH!=""
                 str=father(nameH,membersD[chil[k]])
                 open("myFamily.pl","a") do file
-                    write(file,("father('$(str.father)', '$(str.child)')\n"))
+                    write(file,("father('$(str.father)', '$(str.child)').\n"))
                 end
             end
-            #fathers[husbCount]=str
-            #husbCount++
         end
     end
     if contains(families[j],"WIFE")&&contains(families[j],"CHIL")
@@ -62,24 +50,43 @@ for j in eachindex(families)
         wife=replace(wife,"WIFE ","")
         wife=replace(wife,"\r","")
         chil=matchall(r"CHIL .*",families[j])
-        #println(husb)
         for k in eachindex(chil)
             chil[k]=replace(chil[k],"CHIL ","")
             chil[k]=replace(chil[k],"\r","")
-            #println(chil[k])s
             nameM=membersD[wife]
             if nameM!=""
                 str=mother(nameM,membersD[chil[k]])
                 open("myFamily.pl","a") do file
-                    write(file,("mother('$(str.mother)', '$(str.child)')\n"))
+                    write(file,("mother('$(str.mother)', '$(str.child)').\n"))
                 end
-                end
-            #fathers[husbCount]=str
-            #husbCount++
+            end
         end  
     end
 end
 
-#println(fathers)
-#println(names)
+file=open("family.txt")
+# index=size(names)
+sex=String[]
+for line in eachline(file)
+    if contains(line, "1 SEX M")
+    #    sex[index]="M"
+    push!(sex,"male")
+    end
+    if contains(line, "1 SEX F")
+    #    sex[index]="F"
+    push!(sex,"female")
+    end
+end
+close(file)
+
+#show(sex)
+
+for j in eachindex(names)
+    temp=pop!(sex)
+    open("myFamily.pl","a") do file
+        if names[size(names,1)-j+1]!=""
+    write(file,"$temp('$(names[size(names,1)-j+1])').\n")
+        end
+    end
+end
 
