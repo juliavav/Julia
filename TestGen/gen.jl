@@ -7,8 +7,8 @@ end
 
 close(file)
 wordsSize=size(words,1)
-patternSize=rand(1:5)
-textSize=rand(30:100)
+patternSize=rand(1:4)
+textSize=rand(3000:5000)
 
 patternNums=rand(1:wordsSize,patternSize)
 #show(patternNums)
