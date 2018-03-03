@@ -5,12 +5,14 @@ function counting(num1,num2,operation,file)
         if num1>num2 
             answer=num1-num2
         else 
-            answer="ERROR"
+            answer="Error"
         end
     elseif operation == '*'
         answer=num1 * num2
     elseif operation == '/'
         answer=num1 % num2
+    elseif operation == '^'
+        answer=num1 ^ num2
     elseif operation == '<'
         answer=num1<num2
     elseif operation == '>'
@@ -22,7 +24,7 @@ function counting(num1,num2,operation,file)
 end
 
 n=15
-operations =['+','-','/','*','=','>','<']
+operations =['+','-','/','*','=','>','<','^']
 fileTest=open("test1","w");
 fileAnsw=open("answ","w");
 for i=1:n
